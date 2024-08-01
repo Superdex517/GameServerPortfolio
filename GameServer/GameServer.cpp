@@ -4,74 +4,82 @@
 #include <atomic>
 #include <future>
 #include "ThreadManager.h"
+
 #include "RefCounting.h"
+#include "Memory.h"
+#include "Allocator.h"
 
-
-class Wraight : public RefCountable
-{
-public:
-	int _hp = 150;
-	int _posX = 0;
-	int _posY = 0;
-};
-using WraightRef = TSharedPtr<Wraight>;
-
-class Missile : public RefCountable
-{
-public:
-	void SetTarget(WraightRef target)
-	{
-		_target = target;
-		//중간에 누군가 개입 가능
-		//Test(target);
-	}
-
-	//진짜 내부적으로 사용하게 될 경우 
-	//스마트 포인터의 레퍼런스를 넘겨주는방식으로 사용
-	//void Test(WraightRef& target)
-	//{
-
-	//}
-
-	bool Update()
-	{
-		if (_target == nullptr)
-			return true;
-
-		int posX = _target->_posX;
-		int posY = _target->_posY;
-
-		if (_target->_hp == 0)
-		{
-			_target->ReleaseRef();
-			_target = nullptr;
-			return true;
-		}
-
-		return false;
-	}
-
-	WraightRef _target = nullptr;
-};
-using MissileRef = TSharedPtr<Missile>;
 
 int main()
 {
-	WraightRef w(new Wraight());
-	w->ReleaseRef();
-	MissileRef m(new Missile());
-	m->ReleaseRef();
+	// 윈속 초기화 (ws2_32 라이브러리 초기화)
+// 관련 정보가 wsaData에 채워짐
+	WSAData wsaData;
+	if (::WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+		return 0;
 
-	m->SetTarget(w);
-	w->_hp = 0;
-	w = nullptr;
+	// ad : Address Family (AF_INET = IPv4, AF_INET6 = IPv6)
+	// type : TCP(SOCK_STREAM) vs UDP(SOCK_DGRAM)
+	// protocol : 0
+	// return : descriptor
+	SOCKET listenSocket = ::socket(AF_INET, SOCK_STREAM, 0);
+	if (listenSocket == INVALID_SOCKET)
+	{
+		int32 errCode = ::WSAGetLastError();
+		cout << "Socket ErrorCode : " << errCode << endl;
+		return 0;
+	}
+
+	// 나의 주소는? (IP주소 + Port)->XX 아파트 YY 호
+	SOCKADDR_IN serverAddr; // IPv4
+	::memset(&serverAddr, 0, sizeof(serverAddr));
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_addr.s_addr = ::htonl(INADDR_ANY); //< 니가 알아서 해줘
+	serverAddr.sin_port = ::htons(7777); // 80 : HTTP
+
+	// 안내원 폰 개통! 식당의 대표 번호
+	if (::bind(listenSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+	{
+		int32 errCode = ::WSAGetLastError();
+		cout << "Bind ErrorCode : " << errCode << endl;
+		return 0;
+	}
+
+	// 영업 시작!
+	if (::listen(listenSocket, 10) == SOCKET_ERROR)
+	{
+		int32 errCode = ::WSAGetLastError();
+		cout << "Listen ErrorCode : " << errCode << endl;
+		return 0;
+	}
+
+	// -----------------------------
 
 	while (true)
 	{
-		if (m->Update())
+		SOCKADDR_IN clientAddr; // IPv4
+		::memset(&clientAddr, 0, sizeof(clientAddr));
+		int32 addrLen = sizeof(clientAddr);
+
+		SOCKET clientSocket = ::accept(listenSocket, (SOCKADDR*)&clientAddr, &addrLen);
+		if (clientSocket == INVALID_SOCKET)
 		{
-			m = nullptr;
+			int32 errCode = ::WSAGetLastError();
+			cout << "Accept ErrorCode : " << errCode << endl;
+			return 0;
 		}
+
+		// 손님 입장!
+		char ipAddress[16];
+		::inet_ntop(AF_INET, &clientAddr.sin_addr, ipAddress, sizeof(ipAddress));
+		cout << "Client Connected! IP = " << ipAddress << endl;
+
+		// TODO
 	}
-	m = nullptr;
+
+	// -----------------------------
+
+
+	// 윈속 종료
+	::WSACleanup();
 }
