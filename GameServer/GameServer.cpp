@@ -25,6 +25,11 @@ struct Session
 	WSAOVERLAPPED overlapped = {};
 };
 
+void CALLBACK RecvCallback(DWORD error, DWORD recvLen, LPWSAOVERLAPPED overlapped, DWORD flags)
+{
+	cout << "Data Recv Len Callback = " << recvLen << endl;
+}
+
 int main()
 {
 	WSAData wsaData;
@@ -53,6 +58,10 @@ int main()
 
 	cout << "Accept" << endl;
 
+
+
+
+
 	while (true)
 	{
 		SOCKADDR_IN clientAddr;
@@ -73,7 +82,6 @@ int main()
 
 		Session session = Session{ clientSocket };
 		WSAEVENT wsaEvent = ::WSACreateEvent();
-		session.overlapped.hEvent = wsaEvent;
 
 		cout << "Client Connected !" << endl;
 
@@ -85,13 +93,15 @@ int main()
 
 			DWORD recvLen = 0;
 			DWORD flags = 0;
-
-			if (::WSARecv(clientSocket, &wsaBuf, 1, &recvLen, &flags, &session.overlapped, nullptr) == SOCKET_ERROR)
+			
+			if (::WSARecv(clientSocket, &wsaBuf, 1, &recvLen, &flags, &session.overlapped, RecvCallback) == SOCKET_ERROR)
 			{
 				if (::WSAGetLastError() == WSA_IO_PENDING)
 				{
-					::WSAWaitForMultipleEvents(1, &wsaEvent, TRUE, WSA_INFINITE, FALSE);
-					::WSAGetOverlappedResult(session.socket, &session.overlapped, &recvLen, FALSE, &flags);
+					//pending
+					//Alertable wait
+					::SleepEx(INFINITE, TRUE);
+					//::WSAWaitForMultipleEvents(1, &wsaEvent, TRUE, WSA_INFINITE, TRUE);
 				}
 				else
 				{
@@ -99,8 +109,10 @@ int main()
 					break;
 				}
 			}
-
-			cout << "DATA RECV LEN = " << recvLen << endl;
+			else
+			{
+				cout << "DATA RECV LEN = " << recvLen << endl;
+			}
 		}
 
 		::closesocket(session.socket);
