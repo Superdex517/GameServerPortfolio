@@ -95,7 +95,7 @@ void Lock::WriteUnlock(const char* name)
 	if ((_lockFlag.load() & READ_COUNT_MASK) != 0)
 		CRASH("INVALID_UNLOCK_ORDER");
 
-	const int lockCount = --_writeCount;
+	const int32 lockCount = --_writeCount;
 	if (lockCount == 0)
 		_lockFlag.store(EMPTY_FLAG);
 }

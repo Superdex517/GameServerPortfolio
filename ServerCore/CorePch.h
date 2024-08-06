@@ -13,6 +13,7 @@ using namespace std;
 #include "Lock.h"
 #include "ObjectPool.h"
 #include "TypeCast.h"
+#include "Memory.h"
 
 #include <winsock2.h>
 #include <mswsock.h>
