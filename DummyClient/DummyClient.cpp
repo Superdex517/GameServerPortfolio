@@ -21,6 +21,9 @@ public:
 
 	virtual int32 OnRecvPacket(BYTE* buffer, int32 len) override
 	{
+		//문제점
+		//1)데이터 순서가 바뀌거나 누락할 경우 엉뚱한 값이 들어간다
+		//2)패킷별로 구분이 되어있지 않다(무엇을 파싱해줄지).
 		BufferReader br(buffer, len);
 
 		PacketHeader header;

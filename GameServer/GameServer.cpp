@@ -28,7 +28,7 @@ int main()
 	}
 
 	//사이즈 입력 조심!!
-	char sendData[] = "Hello World";
+	char sendData[1000] = "Hello World";
 
 	//bufferWrite, reader는 복잡하게 사용했던 패킷을 보기 편하게 만들어준것
 	while (true)
