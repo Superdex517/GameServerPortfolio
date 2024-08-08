@@ -17,64 +17,81 @@ void ClientPacketHandler::HandlePacket(BYTE* buffer, int32 len)
 	}
 }
 
-struct BuffData
-{
-	uint64 buffId;
-	float remainTime;
-};
+#pragma pack(1)
 
-struct S_TEST
+
+//[ PKT_S_TEST ][BuffsListItem BuffsListItem BuffsListItem]
+struct PKT_S_TEST
 {
+	struct BuffsListItem
+	{
+		uint64 buffId;
+		float remainTime;
+	};
+
+	uint16 packetSize; //공용 헤더
+	uint16 packetId; //공용 헤더
 	uint64 id;
 	uint32 hp;
 	uint16 attack;
+	uint16 buffsOffset;
+	uint16 buffsCount;
 
-	//가변데이터 추가되면??
-	//1) 문자열
-	//2) 그냥 바이트 배열(길드 이미지)
-	//3) 일반 리스트
-	vector<BuffData> buffs;
+	bool Validate()
+	{
+		uint32 size = 0;
+		size += sizeof(PKT_S_TEST);
+		size += buffsCount * sizeof(BuffsListItem);
 
-	wstring name;
+		if (size != packetSize)
+			return false;
+
+		if (buffsOffset + buffsCount * sizeof(BuffsListItem) > packetSize)
+			return false;
+
+		return true;
+	}
+	//vector<BuffData> buffs;
+	//wstring name;
 };
+#pragma pack()
 
 void ClientPacketHandler::Handle_S_TEST(BYTE* buffer, int32 len)
 {
 	BufferReader br(buffer, len);
 
-	PacketHeader header;
-	br >> header;
+	if (len < sizeof(PKT_S_TEST))
+		return;
 
-	uint64 id;
-	uint32 hp;
-	uint16 attack;
-	br >> id >> hp >> attack;
+	PKT_S_TEST pkt;
+	br >> pkt;
 
-	cout << " ID: " << id << " HP : " << hp << " attack:  " << attack << endl;
+	if (pkt.Validate() == false)
+		return;
 
-	vector<BuffData> buffs;
-	uint16 buffCount;
-	br >> buffCount;
+	//cout << " ID: " << id << " HP : " << hp << " attack:  " << attack << endl;
 
-	buffs.resize(buffCount);
-	for (BuffData& i : buffs)
+	vector<PKT_S_TEST::BuffsListItem> buffs;
+
+	buffs.resize(pkt.buffsCount);
+	for (int32 i = 0; i < pkt.buffsCount; i++)
 	{
-		br >> i.buffId >> i.remainTime;
+		br >> buffs[i];
 	}
 
-	cout << "BuffCount : " << buffCount << endl;
-	for (BuffData& i : buffs)
+	cout << "BuffCount : " << pkt.buffsCount << endl;
+	for (int32 i = 0; i < pkt.buffsCount; i++)
 	{
-		cout << "BufInfo : " << i.buffId << " " << i.remainTime << endl;
+		cout << "BufInfo : " << buffs[i].buffId << " " << buffs[i].remainTime << endl;
 	}
 
-	wstring name;
-	uint16 nameLen;
-	br >> nameLen;
-	name.resize(nameLen);
+	//wstring name;
+	//uint16 nameLen;
+	//br >> nameLen;
+	//name.resize(nameLen);
 
-	br.Read((void*)name.data(), nameLen * sizeof(WCHAR));
+	//br.Read((void*)name.data(), nameLen * sizeof(WCHAR));
 
-	wcout.imbue(std::locale("kor"));
-	wcout << name << endl;
+	//wcout.imbue(std::locale("kor"));
+	//wcout << name << endl;
 }
