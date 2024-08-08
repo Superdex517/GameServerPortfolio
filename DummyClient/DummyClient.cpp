@@ -1,12 +1,12 @@
 ﻿#include "pch.h"
-#include <iostream>
 #include "ThreadManager.h"
 #include "Service.h"
 #include "Session.h"
+#include "BufferReader.h"
 
-char sendBuffer[] = "Hello World";
+char sendData[] = "Hello World";
 
-class ServerSession : public Session
+class ServerSession : public PacketSession
 {
 public:
 	~ServerSession()
@@ -16,28 +16,38 @@ public:
 
 	virtual void OnConnected() override
 	{
-		cout << "Connected to Server" << endl;
-		Send((BYTE*)sendBuffer, sizeof(sendBuffer));
+		//cout << "Connected To Server" << endl;
 	}
 
-	virtual int32 OnRecv(BYTE* buffer, int32 len) override
+	virtual int32 OnRecvPacket(BYTE* buffer, int32 len) override
 	{
-		cout << "OnRecv Len = " << len << endl;
+		BufferReader br(buffer, len);
 
-		this_thread::sleep_for(1s);
+		PacketHeader header;
+		br >> header;
 
-		Send((BYTE*)sendBuffer, sizeof(sendBuffer));
+		uint64 id;
+		uint32 hp;
+		uint16 attack;
+		br >> id >> hp >> attack;
+
+		cout << "ID: " << id << "HP : " << hp << "attack:  " << attack << endl;
+		
+		char recvBuffer[4096];
+		br.Read(recvBuffer, header.size - sizeof(PacketHeader) - 8 - 4 - 2);
+		cout << recvBuffer << endl;
+
 		return len;
 	}
 
-	virtual void OnSend(int32 len)override
+	virtual void OnSend(int32 len) override
 	{
-		cout << "OnSend Len = " << len << endl;
+		//cout << "OnSend Len = " << len << endl;
 	}
 
 	virtual void OnDisconnected() override
 	{
-		cout << " Disconnected " << endl;
+		//cout << "Disconnected" << endl;
 	}
 };
 
@@ -49,7 +59,7 @@ int main()
 		NetAddress(L"127.0.0.1", 7777),
 		MakeShared<IocpCore>(),
 		MakeShared<ServerSession>, // TODO : SessionManager 등
-		5);
+		1000);
 
 	ASSERT_CRASH(service->Start());
 

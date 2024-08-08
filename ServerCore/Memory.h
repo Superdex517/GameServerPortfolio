@@ -26,14 +26,14 @@ private:
 	MemoryPool* _poolTable[MAX_ALLOC_SIZE + 1];
 };
 
+
 template<typename Type, typename... Args>
 Type* Xnew(Args&&... args)
 {
 	//메모리 할당
 	Type* memory = static_cast<Type*>(PoolAllocator::Alloc(sizeof(Type)));
-	
 	//메모리 위에 생성자를 호출해달라는 문법
-	new(memory)Type(std::forward<Args>(args)...);
+	new(memory)Type(forward<Args>(args)...); // placement new
 	return memory;
 }
 
