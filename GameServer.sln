@@ -9,41 +9,68 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DummyClient", "DummyClient\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerCore", "ServerCore\ServerCore.vcxproj", "{A4B15E6C-F80C-4915-8D27-B70344898AAE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{D417787F-F208-492B-87FD-E1084D8507BD}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PacketGenerator", "Tools\PacketGenerator\PacketGenerator.pyproj", "{E40627F1-144B-4586-BEEC-8D4D10BC87EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Debug|Any CPU.Build.0 = Debug|x64
 		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Debug|x64.ActiveCfg = Debug|x64
 		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Debug|x64.Build.0 = Debug|x64
 		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Debug|x86.ActiveCfg = Debug|Win32
 		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Debug|x86.Build.0 = Debug|Win32
+		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Release|Any CPU.ActiveCfg = Release|x64
+		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Release|Any CPU.Build.0 = Release|x64
 		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Release|x64.ActiveCfg = Release|x64
 		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Release|x64.Build.0 = Release|x64
 		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Release|x86.ActiveCfg = Release|Win32
 		{840F7A7C-E37B-4159-8BF5-BE2EFBEBEA4D}.Release|x86.Build.0 = Release|Win32
+		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Debug|Any CPU.Build.0 = Debug|x64
 		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Debug|x64.ActiveCfg = Debug|x64
 		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Debug|x64.Build.0 = Debug|x64
 		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Debug|x86.ActiveCfg = Debug|Win32
 		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Debug|x86.Build.0 = Debug|Win32
+		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Release|Any CPU.ActiveCfg = Release|x64
+		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Release|Any CPU.Build.0 = Release|x64
 		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Release|x64.ActiveCfg = Release|x64
 		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Release|x64.Build.0 = Release|x64
 		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Release|x86.ActiveCfg = Release|Win32
 		{176B0F52-39DA-4321-86EC-06CB1A1567DB}.Release|x86.Build.0 = Release|Win32
+		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Debug|Any CPU.Build.0 = Debug|x64
 		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Debug|x64.ActiveCfg = Debug|x64
 		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Debug|x64.Build.0 = Debug|x64
 		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Debug|x86.ActiveCfg = Debug|Win32
 		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Debug|x86.Build.0 = Debug|Win32
+		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Release|Any CPU.ActiveCfg = Release|x64
+		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Release|Any CPU.Build.0 = Release|x64
 		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Release|x64.ActiveCfg = Release|x64
 		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Release|x64.Build.0 = Release|x64
 		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Release|x86.ActiveCfg = Release|Win32
 		{A4B15E6C-F80C-4915-8D27-B70344898AAE}.Release|x86.Build.0 = Release|Win32
+		{E40627F1-144B-4586-BEEC-8D4D10BC87EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E40627F1-144B-4586-BEEC-8D4D10BC87EA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E40627F1-144B-4586-BEEC-8D4D10BC87EA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E40627F1-144B-4586-BEEC-8D4D10BC87EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E40627F1-144B-4586-BEEC-8D4D10BC87EA}.Release|x64.ActiveCfg = Release|Any CPU
+		{E40627F1-144B-4586-BEEC-8D4D10BC87EA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E40627F1-144B-4586-BEEC-8D4D10BC87EA} = {D417787F-F208-492B-87FD-E1084D8507BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6C281F33-427F-4FB7-81EC-8045301575A6}

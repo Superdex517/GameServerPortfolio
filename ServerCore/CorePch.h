@@ -8,6 +8,7 @@
 
 #include <windows.h>
 #include <iostream>
+#include <functional>
 using namespace std;
 
 #include <winsock2.h>
