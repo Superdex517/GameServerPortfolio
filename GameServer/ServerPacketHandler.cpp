@@ -17,5 +17,10 @@ void ServerPacketHandler::HandlePacket(BYTE* buffer, int32 len)
 	}
 }
 
+SendBufferRef ServerPacketHandler::MakeSendBuffer(Protocol::S_TEST& pkt)
+{
+	return _MakeSendBuffer(pkt, S_TEST);
+}
+
 
 
